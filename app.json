@@ -1,0 +1,6 @@
+{
+    "name": "Line Selfbot",
+    "description": "A bot to manage groups and messages in Line Messenger",
+    "repository": "https://github.com/dnswd/line-selfbot",
+    "keywords": ["python", "line", "messenger", "naver", "selfbot"]
+}
