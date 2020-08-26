@@ -37,8 +37,8 @@ def LINE_OP_TYPE(op):
     if op.type == 25:  # sent message
         message = op.message
         content = message.text
-        msg_to = message.to  # send
-        msg_from = message._from  # man
+        msg_to = message.to
+        msg_from = message._from
 
         if message.contentType == 0:
             if "@everyone" in content and msg_from in whitelist:
