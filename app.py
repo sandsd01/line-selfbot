@@ -1,20 +1,22 @@
 import json
+import os
 import threading
+from dotenv import load_dotenv
 from linepy import (LINE, Channel, OEPoll, OpType)
 
-# loading config
-with open('config.json', 'r') as f:
-    config = json.load(f)
-
+# Auth
+load_dotenv()
 try:
-    if len(config["EMAIL/ID"]) != 0:
-        client = LINE(config["EMAIL"], config["PASSWORD"])
-    elif config["TOKEN"] == "":
-        client = LINE(showQr=True)
+    if (id_ := os.getenv("EMAIL_ID")) and (pwd := os.getenv("PASSWORD")):
+        client = LINE(id_, pwd)
+    elif token := os.getenv("TOKEN"):
+        client = LINE(idOrAuthToken=token)
     else:
-        client = LINE(idOrAuthToken=config["TOKEN"])
-except json.decoder.JSONDecodeError as f:
+        client = LINE(showQr=True)
+except Exception as e:
     print("Failed to authenticate")
+    print(e)
+    exit(1)
 
 ops = OEPoll(client)
 whitelist = [client.profile.mid, client, ]
@@ -40,6 +42,7 @@ def LINE_OP_TYPE(op):
         msg_to = message.to
         msg_from = message._from
 
+        # message only contains text
         if message.contentType == 0:
             if "@everyone" in content and msg_from in whitelist:
                 group = client.getGroup(msg_to)
